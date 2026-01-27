@@ -9,6 +9,18 @@ package edu.eci.arsw.threads;
  *
  * @author hcadavid
  */
-public class CountThread {
-    
+public class CountThread extends  Thread{
+    private int min;
+    private int max;
+
+    public CountThread (int min , int max ){
+        this.min = min;
+        this.max = max;
+    }
+
+    public void run(){
+        for(int i = this.min; i <= this.max; i++){
+            System.out.println(i);
+        }
+    }
 }
