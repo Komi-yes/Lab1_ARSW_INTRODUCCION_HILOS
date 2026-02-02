@@ -18,9 +18,10 @@ public class Supervisor extends Thread{
         HostBlacklistsDataSourceFacade skds=HostBlacklistsDataSourceFacade.getInstance();
 
         for (int i=section*sectionSize;i<(section+1)*sectionSize;i++){
+            //System.out.println("seccion: "+section+", indice seccion:"+i);
 
             if (skds.isInBlackListServer(i, host)){
-                System.out.println(i);
+                //System.out.println("seccion: "+section+", indice seccion:"+i);
                 addBlackListOcurrence(i);
             }
         }
