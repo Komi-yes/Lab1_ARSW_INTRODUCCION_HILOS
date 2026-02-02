@@ -8,17 +8,20 @@ package edu.eci.arsw.blacklistvalidator;
 import edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author hcadavid
+ * @author Sofia Nicolle Ariza Goenaga
  */
 public class HostBlackListsValidator {
 
     private static final int BLACK_LIST_ALARM_COUNT=5;
-    
+    private static LinkedList<Integer> blackListOcurrences = new LinkedList<>();
+    private static int ocurrencesCount = 0;
+    private static CountDownLatch latch = new CountDownLatch(BLACK_LIST_ALARM_COUNT);
     /**
      * Check the given host's IP address in all the available black lists,
      * and report it as NOT Trustworthy when such IP was reported in at least
@@ -29,27 +32,24 @@ public class HostBlackListsValidator {
      * @param ipaddress suspicious host's IP address.
      * @return  Blacklists numbers where the given host's IP address was found.
      */
-    public List<Integer> checkHost(String ipaddress){
-        
-        LinkedList<Integer> blackListOcurrences=new LinkedList<>();
-        
-        int ocurrencesCount=0;
-        
+    public List<Integer> checkHost(String ipaddress, int n){
         HostBlacklistsDataSourceFacade skds=HostBlacklistsDataSourceFacade.getInstance();
-        
+
+        int threadSectionSize = skds.getRegisteredServersCount() / n;
         int checkedListsCount=0;
+
         
-        for (int i=0;i<skds.getRegisteredServersCount() && ocurrencesCount<BLACK_LIST_ALARM_COUNT;i++){
-            checkedListsCount++;
-            
-            if (skds.isInBlackListServer(i, ipaddress)){
-                
-                blackListOcurrences.add(i);
-                
-                ocurrencesCount++;
-            }
+        for (int i=0; i < n && ocurrencesCount<BLACK_LIST_ALARM_COUNT;i++){
+            Thread thread = new Supervisor(ipaddress, i,  threadSectionSize);
+            thread.start();
         }
-        
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         if (ocurrencesCount>=BLACK_LIST_ALARM_COUNT){
             skds.reportAsNotTrustworthy(ipaddress);
         }
@@ -65,6 +65,10 @@ public class HostBlackListsValidator {
     
     private static final Logger LOG = Logger.getLogger(HostBlackListsValidator.class.getName());
     
-    
+    public static synchronized void addBlackListOcurrence(int index){
+        blackListOcurrences.add(index);
+        ocurrencesCount++;
+        latch.countDown();
+    }
     
 }
