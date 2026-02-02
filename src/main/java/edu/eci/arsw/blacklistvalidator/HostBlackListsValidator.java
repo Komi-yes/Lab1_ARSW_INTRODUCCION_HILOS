@@ -42,7 +42,15 @@ public class HostBlackListsValidator {
         for (int i=0; i < n && ocurrencesCount<BLACK_LIST_ALARM_COUNT;i++){
             Thread thread = new Supervisor(ipaddress, i,  threadSectionSize);
             thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("HILO CREADO: "+i);
         }
+
+        System.out.println("NIGGA TODO CREADO"+", OCURRENCECOUNT: "+ocurrencesCount);
 
         try {
             latch.await();
