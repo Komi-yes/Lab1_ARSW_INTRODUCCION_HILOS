@@ -49,6 +49,11 @@ public class HostBlackListsValidator {
         }
 
         try {
+            if(checkedListsCount == skds.getRegisteredServersCount()){
+                for(int i = 0; i<BLACK_LIST_ALARM_COUNT-ocurrencesCount; i++){
+                    latch.countDown();
+                }
+            }
             latch.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
