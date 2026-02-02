@@ -9,14 +9,14 @@ import java.util.List;
 
 /**
  *
- * @author hcadavid
+ * @author Daniel palacios Moreno & Sofia Nicolle Ariza Goenaga
  */
 public class Main {
     
     public static void main(String[] args){
         HostBlackListsValidator hblv=new HostBlackListsValidator();
         int n = 1000;
-        List<Integer> blackListOcurrences=hblv.checkHost("202.24.34.55", n);
+        List<Integer> blackListOcurrences=hblv.checkHost("212.24.34.55", n);
         System.out.println("The host was found in the following blacklists:"+blackListOcurrences);
         
     }
