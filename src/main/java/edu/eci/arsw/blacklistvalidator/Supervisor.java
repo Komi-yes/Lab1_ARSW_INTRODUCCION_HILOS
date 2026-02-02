@@ -11,6 +11,7 @@ public class Supervisor extends Thread{
     public Supervisor(String Host, int section, int sectionSize){
         this.section = section;
         this.sectionSize = sectionSize;
+        this.host = Host;
     }
 
     public void run(){

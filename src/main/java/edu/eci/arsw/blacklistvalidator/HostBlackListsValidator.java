@@ -19,9 +19,9 @@ import java.util.logging.Logger;
 public class HostBlackListsValidator {
 
     private static final int BLACK_LIST_ALARM_COUNT=5;
-    private static LinkedList<Integer> blackListOcurrences = new LinkedList<>();
-    private static int ocurrencesCount = 0;
-    private static CountDownLatch latch = new CountDownLatch(BLACK_LIST_ALARM_COUNT);
+    private static LinkedList<Integer> blackListOcurrences;
+    private static int ocurrencesCount;
+    private static CountDownLatch latch;
     /**
      * Check the given host's IP address in all the available black lists,
      * and report it as NOT Trustworthy when such IP was reported in at least
@@ -33,11 +33,14 @@ public class HostBlackListsValidator {
      * @return  Blacklists numbers where the given host's IP address was found.
      */
     public List<Integer> checkHost(String ipaddress, int n){
+        blackListOcurrences = new LinkedList<>();
+        ocurrencesCount = 0;
+        latch = new CountDownLatch(BLACK_LIST_ALARM_COUNT);
+
         HostBlacklistsDataSourceFacade skds=HostBlacklistsDataSourceFacade.getInstance();
 
         int threadSectionSize = skds.getRegisteredServersCount() / n;
         int checkedListsCount=0;
-
         
         for (int i=0; i < n && ocurrencesCount<BLACK_LIST_ALARM_COUNT;i++){
             Thread thread = new Supervisor(ipaddress, i,  threadSectionSize);
