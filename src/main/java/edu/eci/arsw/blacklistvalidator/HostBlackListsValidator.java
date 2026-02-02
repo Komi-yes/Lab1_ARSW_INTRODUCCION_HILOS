@@ -22,6 +22,7 @@ public class HostBlackListsValidator {
     private static LinkedList<Integer> blackListOcurrences;
     private static int ocurrencesCount;
     private static CountDownLatch latch;
+    private static int checkedListsCount;
     /**
      * Check the given host's IP address in all the available black lists,
      * and report it as NOT Trustworthy when such IP was reported in at least
@@ -40,20 +41,12 @@ public class HostBlackListsValidator {
         HostBlacklistsDataSourceFacade skds=HostBlacklistsDataSourceFacade.getInstance();
 
         int threadSectionSize = skds.getRegisteredServersCount() / n;
-        int checkedListsCount=0;
+        checkedListsCount = 0;
         
         for (int i=0; i < n && ocurrencesCount<BLACK_LIST_ALARM_COUNT;i++){
             Thread thread = new Supervisor(ipaddress, i,  threadSectionSize);
             thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            System.out.println("HILO CREADO: "+i);
         }
-
-        System.out.println("NIGGA TODO CREADO"+", OCURRENCECOUNT: "+ocurrencesCount);
 
         try {
             latch.await();
@@ -80,6 +73,10 @@ public class HostBlackListsValidator {
         blackListOcurrences.add(index);
         ocurrencesCount++;
         latch.countDown();
+    }
+
+    public static synchronized void addCheckedListsCount(){
+        checkedListsCount ++;
     }
     
 }

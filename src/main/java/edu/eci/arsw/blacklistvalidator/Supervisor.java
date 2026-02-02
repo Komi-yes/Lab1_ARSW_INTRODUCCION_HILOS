@@ -2,6 +2,7 @@ package edu.eci.arsw.blacklistvalidator;
 
 import edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade;
 import static edu.eci.arsw.blacklistvalidator.HostBlackListsValidator.addBlackListOcurrence;
+import static edu.eci.arsw.blacklistvalidator.HostBlackListsValidator.addCheckedListsCount;
 
 public class Supervisor extends Thread{
     private String host;
@@ -18,10 +19,8 @@ public class Supervisor extends Thread{
         HostBlacklistsDataSourceFacade skds=HostBlacklistsDataSourceFacade.getInstance();
 
         for (int i=section*sectionSize;i<(section+1)*sectionSize;i++){
-            //System.out.println("seccion: "+section+", indice seccion:"+i);
-
+            addCheckedListsCount();
             if (skds.isInBlackListServer(i, host)){
-                //System.out.println("seccion: "+section+", indice seccion:"+i);
                 addBlackListOcurrence(i);
             }
         }
