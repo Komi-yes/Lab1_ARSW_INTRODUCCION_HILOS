@@ -105,60 +105,6 @@ Aunque hay multiples soluciones que podrian ayudar a que la busqueda se detenga 
 
 ## 📊 Parte III – Evaluación de Desempeño
 
-### 🖥️ Características de las máquinas de prueba
-Antes de iniciar los experimentos, documentar las especificaciones de cada computador:
-
-- **Computador A**
-	- CPU: intel i5-13500
-	- Núm. de núcleos: 14
-	- RAM: 32
-
-- **Computador B**
-	- CPU:
-	- Núm. de núcleos:
-	- RAM:
-	- Sistema operativo:
-
----
-
-### 🔬 Experimentos en dos computadores y dos lenguajes
-
-Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los siguientes escenarios:
-
-#### 🖥️ Computador A
-1. **Java**
-	- 1 hilo : **112385 miliseconds**
-	- Núm. de hilos = núm. de núcleos : **6955 miliseconds**
-	- Núm. de hilos = 2 × núm. de núcleos : **3933 miliseconds**
-	- 50 hilos : **1639 miliseconds**
-	- 100 hilos : **1101 miliseconds**
-
-2. **Go**
-	- 1 goroutine : **37385 miliseconds**
-	- Núm. de goroutines = núm. de núcleos : **2285 miliseconds**
-	- Núm. de goroutines = 2 × núm. de núcleos : **1294 miliseconds**
-	- 50 goroutines : **547 miliseconds**
-	- 100 goroutines : **324 miliseconds**
-
----
-
-#### 🖥️ Computador B
-1. **Java**
-	- 1 hilo
-	- Núm. de hilos = núm. de núcleos
-	- Núm. de hilos = 2 × núm. de núcleos
-	- 50 hilos
-	- 100 hilos
-
-2. **Go**
-	- 1 goroutine
-	- Núm. de goroutines = núm. de núcleos
-	- Núm. de goroutines = 2 × núm. de núcleos
-	- 50 goroutines
-	- 100 goroutines
-
----
-
 ### 📈 Monitoreo y análisis
 - En **Java**, utilizar **jVisualVM** para registrar consumo de CPU y memoria.
 - En **Go**, emplear herramientas de perfilado como **pprof** para obtener métricas de rendimiento.
@@ -191,18 +137,18 @@ Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los sigu
 
 #### 🖥️ Computador A
 1. **Java**
-	- 1 hilo
-	- Núm. de hilos = núm. de núcleos
-	- Núm. de hilos = 2 × núm. de núcleos
-	- 50 hilos
-	- 100 hilos
+    - 1 hilo : **112385 miliseconds**
+    - Núm. de hilos (14) : **6955 miliseconds**
+    - Núm. de hilos (28) : **3933 miliseconds**
+    - 50 hilos : **1639 miliseconds**
+    - 100 hilos : **1101 miliseconds**
 
 2. **Go**
-	- 1 goroutine
-	- Núm. de goroutines = núm. de núcleos
-	- Núm. de goroutines = 2 × núm. de núcleos
-	- 50 goroutines
-	- 100 goroutines
+    - 1 goroutine : **37385 miliseconds**
+    - Núm. de goroutines (14) : **2285 miliseconds**
+    - Núm. de goroutines (28) : **1294 miliseconds**
+    - 50 goroutines : **547 miliseconds**
+    - 100 goroutines : **324 miliseconds**
 
 ---
 
