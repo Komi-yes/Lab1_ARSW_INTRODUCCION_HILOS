@@ -6,8 +6,8 @@
 package edu.eci.arsw.threads;
 
 /**
- *
- * @author hcadavid
+ * Thread implementation that counts from a minimum to a maximum value.
+ * @author Daniel Palacios Moreno
  */
 public class CountThread extends  Thread{
     private int min;

@@ -34,6 +34,18 @@ Este ejercicio introduce la **programación con hilos en Java** y su aplicación
 	- Revisar la salida.
 	- Cambiar `start()` por `run()`. ➜ **Analizar diferencias y explicar.**
 
+### Solución:
+
+El archivo CountThread.java se diseña para que se construya con el rango necesario para que en el metodo run con un for simple se recorra el rango y se impriman los valores.
+Para ver el [repositorio Sofia](https://github.com/Sofia-ariza-783/ARSW_Lab_I.git).
+
+Cuando se cambia el start por run, el hilo se ejecuta en el hilo principal, por lo que se imprimen los valores en el orden correcto.
+- **Con start:**
+![img.png](img.png)
+
+- **Con run:**
+![img_1.png](img_1.png)
+
 ---
 
 ## 🔍 Parte II – Ejercicio Black List Search
@@ -46,8 +58,8 @@ Se desarrolla un componente de **seguridad informática** que valida direcciones
 - **`HostBlackListsValidator`** → Método `checkHost` que valida un host y reporta si es confiable o no.
 
 📊 Ejemplo de LOGs:
-INFO: HOST 205.24.34.55 Reported as trustworthy
-INFO: HOST 205.24.34.55 Reported as NOT trustworthy
+- INFO: HOST 205.24.34.55 Reported as trustworthy
+- INFO: HOST 205.24.34.55 Reported as NOT trustworthy
 
 
 ### 🚀 Tareas:
@@ -58,10 +70,24 @@ INFO: HOST 205.24.34.55 Reported as NOT trustworthy
 	- Sumar ocurrencias y reportar confiabilidad.
 	- Mantener LOGs verídicos sobre listas revisadas.
 
+### Solución:
+
+Consideramos que el método planteado en el archivo era ineficiente, ya que en el ejercicio anterior habíamos probado un enfoque similar. Por ello, decidimos diseñar una solución más limpia y eficiente, que aprovechara mejor el uso de los hilos y evitara depender de que todos finalizaran la búsqueda para poder reportar las coincidencias en las listas inseguras.
+
+Para implementar nuestra propuesta, modificamos varios tipos de variables para que fueran Thread-Safe y pudieran ser compartidas directamente entre los hilos sin necesidad de usar la etiqueta synchronized. Este fue el caso de occurrencesCount, checkedListsCount y stopFlag. Con estas variables accesibles, incorporamos dos contadores: CountDownLatch stopLatch y completionLatch. El primero detiene el programa cuando se alcanzan las 5 ocurrencias, apoyándose en la variable stopFlag; el segundo controla el caso en que no se logren dichas ocurrencias mínimas.
+
+El método checkHost inicializa completionLatch con el número de hilos y stopLatch con el número mínimo de ocurrencias requeridas. Luego, mediante un bucle, crea e inicia los hilos. Cada hilo recorre su segmento de la lista, verificando en cada iteración el estado de stopFlag. Si se alcanzan las 5 ocurrencias, todos los hilos se detienen; en caso contrario, se completa la búsqueda en toda la lista y el resultado es capturado por completionLatch.
+
+De esta manera, se optimiza el tiempo de ejecución: no es necesario esperar a que todos los hilos terminen para reportar un host inseguro, pero se garantiza que, si no se encuentran las 5 coincidencias, el sistema lo registre correctamente como confiable.
+
 ---
 
 ## 💡 Parte II.I – Discusión (no implementar aún)
 ¿Cómo optimizar la búsqueda para detenerla cuando ya se alcanzan las ocurrencias mínimas? ➜ Introducir **mecanismos de sincronización** y **cancelación temprana**.
+
+### Solución:
+
+Aunque hay multiples soluciones que podrian ayudar a que la busqueda se detenga cuando se encuentra todas las coincidencias necesarias, la que nosotros consideramos mas interesante fue implementando una variable que funcionara como "luz roja" que indicara cuando tenian que detenerse los hilos, junto con los CountDownLatch que se encargan de controlar cuantas coincidencias se hicieron. Esta solucion en comparacion el join simple, agrega mas lineas de codigo, mas complejidad y aumenta la carga cognitiva del codigo. 
 
 ---
 
