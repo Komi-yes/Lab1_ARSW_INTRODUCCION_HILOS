@@ -25,7 +25,6 @@ public class HostBlackListsValidator {
     private static AtomicBoolean stopFlag;
     private static AtomicInteger checkedListsCount;
 
-
     /**
      * Check the given host's IP address in all the available black lists,
      * and report it as NOT Trustworthy when such IP was reported in at least
