@@ -103,6 +103,138 @@ Aunque hay multiples soluciones que podrian ayudar a que la busqueda se detenga 
 📈 Monitorear con **jVisualVM**: consumo de CPU y memoria.  
 ➜ Graficar **tiempo de solución vs. número de hilos** y analizar.
 
+## 📊 Parte III – Evaluación de Desempeño
+
+### 🖥️ Características de las máquinas de prueba
+Antes de iniciar los experimentos, documentar las especificaciones de cada computador:
+
+- **Computador A**
+	- CPU:
+	- Núm. de núcleos:
+	- RAM:
+	- Sistema operativo:
+
+- **Computador B**
+	- CPU:
+	- Núm. de núcleos:
+	- RAM:
+	- Sistema operativo:
+
+---
+
+### 🔬 Experimentos en dos computadores y dos lenguajes
+
+Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los siguientes escenarios:
+
+#### 🖥️ Computador A
+1. **Java**
+	- 1 hilo
+	- Núm. de hilos = núm. de núcleos
+	- Núm. de hilos = 2 × núm. de núcleos
+	- 50 hilos
+	- 100 hilos
+
+2. **Go**
+	- 1 goroutine
+	- Núm. de goroutines = núm. de núcleos
+	- Núm. de goroutines = 2 × núm. de núcleos
+	- 50 goroutines
+	- 100 goroutines
+
+---
+
+#### 🖥️ Computador B
+1. **Java**
+	- 1 hilo
+	- Núm. de hilos = núm. de núcleos
+	- Núm. de hilos = 2 × núm. de núcleos
+	- 50 hilos
+	- 100 hilos
+
+2. **Go**
+	- 1 goroutine
+	- Núm. de goroutines = núm. de núcleos
+	- Núm. de goroutines = 2 × núm. de núcleos
+	- 50 goroutines
+	- 100 goroutines
+
+---
+
+### 📈 Monitoreo y análisis
+- En **Java**, utilizar **jVisualVM** para registrar consumo de CPU y memoria.
+- En **Go**, emplear herramientas de perfilado como **pprof** para obtener métricas de rendimiento.
+- Graficar **tiempo de solución vs. número de hilos/goroutines** en cada computador y lenguaje.
+- Comparar resultados entre:
+	- Computador A vs. Computador B.
+	- Java vs. Go en cada máquina.
+
+➜ El análisis debe incluir hipótesis sobre diferencias de desempeño, impacto del número de núcleos, y eficiencia relativa de cada lenguaje en escenarios de concurrencia.
+
+### Solución:
+
+### 🖥️ Características de las máquinas de prueba
+
+- **Computador 1**
+	- CPU:
+	- Núm. de núcleos:
+	- RAM:
+
+- **Computador 2**
+	- CPU:
+	- Núm. de núcleos:
+	- RAM:
+
+---
+
+### 🔬 Experimentos en dos computadores y dos lenguajes
+
+Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los siguientes escenarios:
+
+#### 🖥️ Computador A
+1. **Java**
+	- 1 hilo
+	- Núm. de hilos = núm. de núcleos
+	- Núm. de hilos = 2 × núm. de núcleos
+	- 50 hilos
+	- 100 hilos
+
+2. **Go**
+	- 1 goroutine
+	- Núm. de goroutines = núm. de núcleos
+	- Núm. de goroutines = 2 × núm. de núcleos
+	- 50 goroutines
+	- 100 goroutines
+
+---
+
+#### 🖥️ Computador B
+1. **Java**
+	- 1 hilo
+	- Núm. de hilos = núm. de núcleos
+	- Núm. de hilos = 2 × núm. de núcleos
+	- 50 hilos
+	- 100 hilos
+
+2. **Go**
+	- 1 goroutine
+	- Núm. de goroutines = núm. de núcleos
+	- Núm. de goroutines = 2 × núm. de núcleos
+	- 50 goroutines
+	- 100 goroutines
+
+---
+
+### 📈 Monitoreo y análisis
+- En **Java**, utilizar **jVisualVM** para registrar consumo de CPU y memoria.
+- En **Go**, emplear herramientas de perfilado como **pprof** para obtener métricas de rendimiento.
+- Graficar **tiempo de solución vs. número de hilos/goroutines** en cada computador y lenguaje.
+- Comparar resultados entre:
+	- Computador A vs. Computador B.
+	- Java vs. Go en cada máquina.
+
+➜ El análisis debe incluir hipótesis sobre diferencias de desempeño, impacto del número de núcleos, y eficiencia relativa de cada lenguaje en escenarios de concurrencia.
+
+
 ---
 
 ## 📐 Parte IV – Análisis con Ley de Amdahls
