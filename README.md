@@ -41,10 +41,10 @@ Para ver el [repositorio Sofia](https://github.com/Sofia-ariza-783/ARSW_Lab_I.gi
 
 Cuando se cambia el start por run, el hilo se ejecuta en el hilo principal, por lo que se imprimen los valores en el orden correcto.
 - **Con start:**
-![img.png](img.png)
+![img.png](img/img.png)
 
 - **Con run:**
-![img_1.png](img_1.png)
+![img_1.png](img/img_1.png)
 
 ---
 
@@ -138,10 +138,23 @@ Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los sigu
 #### 🖥️ Computador A
 1. **Java**
     - 1 hilo : **112385 miliseconds**
+   
+   ![img_6.png](img/img_6.png)
     - Núm. de hilos (14) : **6955 miliseconds**
+   
+   ![img_7.png](img/img_7.png)
     - Núm. de hilos (28) : **3933 miliseconds**
+   
+   ![img_8.png](img/img_8.png)
     - 50 hilos : **1639 miliseconds**
+   
+   ![img_9.png](img/img_9.png)
     - 100 hilos : **1101 miliseconds**
+   
+   ![img_10.png](img/img_10.png)
+
+## Grafica  Hilos vs Tiempo
+![img_4.png](img/img_4.png)
 
 2. **Go**
     - 1 goroutine : **37385 miliseconds**
@@ -149,6 +162,9 @@ Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los sigu
     - Núm. de goroutines (28) : **1294 miliseconds**
     - 50 goroutines : **547 miliseconds**
     - 100 goroutines : **324 miliseconds**
+
+## Grafica  Hilos vs Tiempo
+![img_5.png](img/img_5.png)
 
 ---
 
@@ -160,7 +176,8 @@ Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los sigu
 	- 50 hilos : **1567 milliseconds**
 	- 100 hilos : **1033 milliseconds**
 
-![img_2.png](img_2.png)
+## Grafica  Hilos vs Tiempo
+![img_2.png](img/img_2.png)
 
 2. **Go**
 	- 1 goroutine : **37556 milliseconds**
@@ -168,8 +185,9 @@ Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los sigu
 	- Núm. de goroutines (12) : **2314 milliseconds**
 	- 50 goroutines : **541 milliseconds**
 	- 100 goroutines : **327 milliseconds**
-
-![img_3.png](img_3.png)
+   
+## Grafica  Hilos vs Tiempo
+![img_3.png](img/img_3.png)
 
 ---
 
@@ -183,14 +201,35 @@ Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los sigu
 
 ➜ El análisis debe incluir hipótesis sobre diferencias de desempeño, impacto del número de núcleos, y eficiencia relativa de cada lenguaje en escenarios de concurrencia.
 
+### Analisis
+
+En este componente, nuestro tiempo de ejecución lo domina la cantidad de consultas que hacemos a miles de listas negras. Cuando una IP aparece rápido en cinco listas, terminamos pronto porque aplicamos el criterio de “corte” y ya no necesitamos seguir buscando. Pero cuando la IP no aparece o aparece muy dispersa, nos toca recorrer muchísimas listas y ahí el programa se vuelve lento: no por “falta de potencia”, sino por la acumulación de esperas que produce consultar lista tras lista.
+
+Bajo esa lógica, nuestra hipótesis principal es que la concurrencia nos beneficia porque nos permite solapar esas esperas. En vez de esperar a que termine una consulta para iniciar la siguiente, lanzamos varias al mismo tiempo y aprovechamos mejor el tiempo total. Por eso vemos mejoras grandes al pasar de 1 a 14/6 hilos, y también por eso seguimos mejorando incluso con 50 o 100: no estamos “multiplicando” el CPU, sino reduciendo el tiempo muerto que se genera cuando cada consulta tarda.
+
+El número de núcleos sí importa, pero lo entendemos más como un soporte para sostener muchas tareas activas que como el límite real del rendimiento. Con más núcleos podemos manejar mejor el volumen de trabajo concurrente, pero como la tarea se parece más a “hacer muchas consultas” que a “hacer muchos cálculos”, el salto de rendimiento no se explica solo por tener 14 vs 6 núcleos. Lo más revelador es que el rendimiento mejora aun cuando el número de hilos supera los núcleos: eso refuerza la idea de que estamos escondiendo latencias, no saturando cálculo puro.
+
+Finalmente, al comparar lenguajes, concluimos que Go es más eficiente en este tipo de concurrencia masiva porque sus goroutines son más livianas y el costo de manejarlas es menor. Java también se beneficia mucho al paralelizar, pero al usar hilos más “pesados” tiende a pagar más sobrecosto cuando subimos a decenas o cientos. Por eso, en nuestros resultados Go termina siendo consistentemente más rápido en escenarios de alta concurrencia: para este problema, donde el cuello está en “muchas consultas”, la ligereza del modelo concurrente marca la diferencia.
+
 
 ---
 
 ## 📐 Parte IV – Análisis con Ley de Amdahls
 
 - ¿Por qué el mejor desempeño no ocurre con 500 hilos?
+
+Porque 500 hilos no necesariamente coincide con el punto óptimo de nuestra solución. En este problema hacemos muchas consultas, y el rendimiento mejora cuando el trabajo se reparte en porciones más pequeñas para “aprovechar” mejor el tiempo de espera. Con 500 hilos todavía puede quedar una carga grande por hilo, y por eso se observa que con más hilos, como con 2000, el reparto es más fino y el tiempo total baja. Además, a partir de cierto punto también aparece sobrecarga, así que el mejor resultado depende del equilibrio entre reparto y costo de administrar hilos.
+
 - Comparar resultados con 200 hilos.
+
+Con 200 hilos el tiempo mejora en ambos lenguajes porque ya se logra una concurrencia suficiente para acelerar las consultas. Sin embargo, no es el mejor escenario si la IP no aparece o está dispersa, porque todavía hay margen para reducir el tiempo total aumentando la cantidad de hilos y disminuyendo el trabajo que le toca a cada uno.
+
 - Evaluar desempeño con núm. de hilos = núm. de núcleos vs. el doble.
+
+En nuestro caso, usar hilos iguales a los núcleos mejora respecto a 1 hilo, pero al usar el doble normalmente seguimos ganando porque el problema tiene mucha “espera” entre consultas. Por eso, incluso con más hilos que núcleos el desempeño puede seguir mejorando, hasta llegar a un punto donde ya no compensa por la sobrecarga.
+
 - Reflexionar sobre escenarios distribuidos (100 máquinas vs. 1 CPU con 100 hilos).
+
+  En nuestro escenario de laboratorio, el problema está dominado por una gran cantidad de consultas y por la latencia entre su creación y la respuesta. Por eso, suele funcionar mejor ejecutar el proceso en una sola máquina con muchos hilos, ya que así podemos mantener varias consultas en curso al mismo tiempo y reducir el tiempo total de espera. En cambio, si el problema estuviera más orientado a cálculo intensivo (muchas operaciones puramente computacionales), podría resultar más conveniente distribuirlo en varias máquinas con procesadores independientes. Sin embargo, en un entorno distribuido aparece un costo adicional: la latencia de comunicación entre máquinas. A partir de cierto punto, ese tiempo extra puede reducir o incluso contrarrestar la ventaja inicial que ofrece repartir el trabajo.
 
 ---
