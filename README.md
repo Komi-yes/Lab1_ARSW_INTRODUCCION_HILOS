@@ -173,15 +173,15 @@ Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los sigu
 
 ### 🖥️ Características de las máquinas de prueba
 
-- **Computador 1**
+- **Computador A**
     - CPU: intel i5-13500
     - Núm. de núcleos: 14
 	- RAM: 32 GB 
 
-- **Computador 2**
-	- CPU:
-	- Núm. de núcleos:
-	- RAM:
+- **Computador B**
+	- CPU: AMD Ryzen 5 5600G
+	- Núm. de núcleos: 6
+	- RAM: 32GB
 
 ---
 
@@ -208,18 +208,22 @@ Se realizarán pruebas en **Java** y en **Go** en cada computador, bajo los sigu
 
 #### 🖥️ Computador B
 1. **Java**
-	- 1 hilo
-	- Núm. de hilos = núm. de núcleos
-	- Núm. de hilos = 2 × núm. de núcleos
-	- 50 hilos
-	- 100 hilos
+	- 1 hilo : **298169 milliseconds**
+	- Núm. de hilos (6) : **44962 milliseconds**
+	- Núm. de hilos (12) : **6290 milliseconds**
+	- 50 hilos : **1567 milliseconds**
+	- 100 hilos : **1033 milliseconds**
+
+![img_2.png](img_2.png)
 
 2. **Go**
-	- 1 goroutine
-	- Núm. de goroutines = núm. de núcleos
-	- Núm. de goroutines = 2 × núm. de núcleos
-	- 50 goroutines
-	- 100 goroutines
+	- 1 goroutine : **37556 milliseconds**
+	- Núm. de goroutines (6) : **5385 milliseconds**
+	- Núm. de goroutines (12) : **2314 milliseconds**
+	- 50 goroutines : **541 milliseconds**
+	- 100 goroutines : **327 milliseconds**
+
+![img_3.png](img_3.png)
 
 ---
 
